@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian NGO | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-orange: #ff9800; --dark: #111; --light-grey: #f6f7f9; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--light-grey); color: #333; }
+        
+        /* Top Bar & Profile Circle */
+        .top-bar {
+            background: var(--dark); padding: 10px 40px;
+            display: flex; justify-content: flex-end; align-items: center; min-height: 55px;
+        }
+        .auth-links a { color: var(--primary-orange); text-decoration: none; font-weight: 600; font-size: 14px; margin-left: 15px; }
+        
+        .profile-container { display: none; position: relative; align-items: center; cursor: pointer; }
+        .user-circle {
+            width: 40px; height: 40px; background: var(--primary-orange);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 700; border: 2px solid white; text-transform: uppercase;
+        }
+        .profile-card {
+            display: none; position: absolute; top: 50px; right: 0;
+            background: white; padding: 20px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); min-width: 250px; z-index: 2000;
+        }
+        .profile-card h4 { color: var(--primary-orange); border-bottom: 1px solid #eee; margin-bottom: 10px; padding-bottom: 5px;}
+        .profile-card p { font-size: 14px; margin: 8px 0; color: #444; word-break: break-all; }
+        .logout-btn { color: #d93025; background: none; border: none; font-weight: 700; cursor: pointer; margin-top: 15px; width: 100%; text-align: left; border-top: 1px solid #eee; padding-top: 10px; }
+
+        /* Navigation */
+        nav {
+            background: #fff; padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 24px; font-weight: 700; color: var(--primary-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo img { width: 30px; }
+        /* Sanskrit Text Style */
+        .sanskrit-motto { font-size: 18px; color: #555; font-weight: 600; margin-left: 10px; border-left: 2px solid #ccc; padding-left: 10px; }
+
+        nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+        nav ul li { position: relative; }
+        nav ul li a { text-decoration: none; color: #333; font-weight: 600; font-size: 15px; cursor: pointer; }
+
+        .dropdown {
+            display: none; position: absolute; top: 30px; left: 0;
+            background: white; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 8px; min-width: 200px; padding: 10px 0;
+        }
+        .dropdown a { display: block; padding: 10px 20px; font-size: 14px; text-decoration: none; color: #333; }
+        .dropdown a:hover { background: #fff3e0; }
+
+        /* Hero */
+        .hero {
+            height: 50vh; color: white; text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://thumbs.dreamstime.com/b/group-boisterous-indian-children-running-photograph-agra-uttar-pradesh-india-mathura-india-feburary-group-boisterous-168764528.jpg') center/cover;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        /* Sections */
+        section { padding: 60px 40px; }
+        .section-title { text-align: center; color: var(--primary-orange); margin-bottom: 40px; font-size: 32px; }
+        .card-container { max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        
+        .event-card, .support-card { 
+            background: white; padding: 30px; border-radius: 15px; 
+            text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            flex: 1; min-width: 300px; max-width: 450px;
+        }
+
+        .apply-btn { background: var(--primary-orange); color: white; border: none; padding: 12px 35px; border-radius: 25px; font-weight: 700; cursor: pointer; margin-top: 15px; text-decoration: none; display: inline-block; }
+
+        /* Footer Copyright */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div id="authLinks" class="auth-links">
+            <a href="login.html">Login</a>
+            <a href="register.html">Register</a>
+        </div>
+        
+        <div class="profile-container" id="profileWrapper" onclick="toggleDropdown('profileCard')">
+            <div class="user-circle" id="emailInitial">?</div>
+            <div class="profile-card" id="profileCard">
+                <h4>Account Details</h4>
+                <p><strong>Email:</strong> <span id="dispEmail">-</span></p>
+                <button class="logout-btn" id="logoutBtn">Logout Account</button>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <div style="display: flex; align-items: center;">
+            <a href="homepage.html" class="logo">NGO <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"></a>
+            <span class="sanskrit-motto">परोपकारः परमो धर्मः</span>
+        </div>
+        <ul>
+            <li><a href="homepage.html">Home</a></li>
+            <li>
+                <a onclick="toggleDropdown('donDrop')">Donation ▾</a>
+                <div class="dropdown" id="donDrop">
+                    <a href="funddonation.html">Fund Donation</a>
+                    <a href="goodsdonation.html">Goods Donation</a>
+                </div>
+            </li>
+            <li><a href="volunteering.html">Volunteer</a></li>
+            <li><a href="#events">Events</a></li>
+            <li>
+                <a onclick="toggleDropdown('suppDrop')">Support Us ▾</a>
+                <div class="dropdown" id="suppDrop">
+                    <a href="educationalsupport.html">Educational Support</a>
+                    <a href="adoption.html">Child Adoption Interest</a>
+                </div>
+            </li>
+            <li><a href="aboutus.html">About Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <h1>Welcome to Our NGO</h1>
+        <p>Your participation makes a world of difference.</p>
+    </div>
+
+    <section id="events">
+        <h2 class="section-title">Upcoming Events</h2>
+        <div class="card-container">
+            <div class="event-card">
+                <img src="https://images.unsplash.com/photo-1615461066841-6116e61058f4" style="width:100%; border-radius:10px; margin-bottom:15px;">
+                <h3>Blood Donation Camp</h3>
+                <p>Join us to save lives in our upcoming community drive.</p>
+                <button class="apply-btn" onclick="openEventForm('Blood Donation Camp')">Apply Now</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-support" style="background: #fff;">
+        <h2 class="section-title">Help & Feedback</h2>
+        <div class="card-container">
+            <div class="support-card">
+                <h3>Feedback</h3>
+                <p>We value your thoughts! Let us know how we are doing.</p>
+                <a href="feedback.html" class="apply-btn">Give Feedback</a>
+            </div>
+            <div class="support-card">
+                <h3>Complaint</h3>
+                <p>Facing any issues? Report them to our team immediately.</p>
+                <a href="complaint.html" class="apply-btn" style="background: #d93025;">File Complaint</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 NGO India. All Rights Reserved. | Together for a better future.</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+            authDomain: "ngo-d09d5.firebaseapp.com",
+            projectId: "ngo-d09d5",
+            storageBucket: "ngo-d09d5.firebasestorage.app",
+            messagingSenderId: "156904887060",
+            appId: "1:156904887060:web:78f1bd83ecf19a9acae801"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            const authLinks = document.getElementById('authLinks');
+            const profileWrapper = document.getElementById('profileWrapper');
+            
+            if (user) {
+                authLinks.style.display = 'none';
+                profileWrapper.style.display = 'flex';
+                document.getElementById('emailInitial').innerText = user.email.charAt(0);
+                document.getElementById('dispEmail').innerText = user.email;
+            } else {
+                authLinks.style.display = 'block';
+                profileWrapper.style.display = 'none';
+            }
+        });
+
+        document.getElementById('logoutBtn').onclick = () => {
+            signOut(auth).then(() => window.location.reload());
+        };
+
+        window.openEventForm = (name) => {
+            window.location.href = `event.html?event=${encodeURIComponent(name)}`;
+        };
+    </script>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            const isVisible = (el.style.display === 'block');
+            document.querySelectorAll('.dropdown, .profile-card').forEach(d => d.style.display = 'none');
+            el.style.display = isVisible ? 'none' : 'block';
+        }
+
+        window.onclick = function(e) {
+            if (!e.target.closest('.profile-container') && !e.target.closest('.dropdown') && !e.target.matches('a')) {
+                document.querySelectorAll('.dropdown, .profile-card').forEach(d => d.style.display = 'none');
+            }
+        }
+    </script>
+</body>
+</html>

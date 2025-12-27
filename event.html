@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Event Apply Form</title>
+    <style>
+        :root {
+            --primary-orange: #FFA500;
+            --text-dark: #333;
+            --bg-light: #F5F5F5;
+            --input-bg: #FFFFFF;
+            --border-radius: 12px;
+            --error-red: #ff4d4d;
+            --success-green: #2ecc71;
+            --shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-orange);
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .page-description {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: var(--input-bg);
+            font-size: 15px;
+            color: #444;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-orange);
+        }
+
+        .show-errors .form-input:invalid {
+            border: 2px solid var(--error-red) !important;
+            background-color: #fff8f8;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #success-message, #error-message {
+            display: none;
+            margin-top: 15px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        #success-message { color: var(--success-green); background: #e8f8f0; border: 1px solid var(--success-green); }
+        #error-message { color: var(--error-red); background: #fff0f0; border: 1px solid var(--error-red); }
+
+        .important-note {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #777;
+            line-height: 1.6;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-orange);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo-container">NGO</a>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Blood Donation Event</h1>
+        <p class="page-description">A bag of blood can be a lifeline for someone.</p>
+
+        <form class="form-container" id="donationForm">
+            <input type="text" id="fullName" class="form-input" placeholder="Full Name" required>
+           
+            <input type="tel" id="mobileNumber" class="form-input" placeholder="Mobile Number (10 digits)"
+                   pattern="[0-9]{10}" maxlength="10" required title="Please enter a 10-digit mobile number">
+           
+            <input type="email" id="emailId" class="form-input" placeholder="Email Address" required>
+           
+            <input type="number" id="ageInput" class="form-input" placeholder="Age (Must be 18-65)"
+                   min="18" max="65" required>
+
+            <select id="bloodGroup" class="form-input" required>
+                <option value="" disabled selected>Select Blood Group *</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="Unknown">I don't know</option>
+            </select>
+           
+            <input type="text" id="lastDate" class="form-input" placeholder="Last Donation Date (Optional)"
+                   onfocus="(this.type='date')" onblur="(this.type='text')">
+           
+            <input type="number" id="weightInput" class="form-input" placeholder="Approximate Weight (Must be 45+ kg)"
+                   min="45" required>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Apply Now</button>
+           
+            <div id="success-message">✓ Form submitted successfully!</div>
+            <div id="error-message">⚠ Error: Invalid details or already registered.</div>
+           
+            <div class="important-note">
+                <strong>Important Note:</strong> Form will only submit if all required fields are filled correctly.
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+            authDomain: "ngo-d09d5.firebaseapp.com",
+            projectId: "ngo-d09d5",
+            storageBucket: "ngo-d09d5.firebasestorage.app",
+            messagingSenderId: "156904887060",
+            appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+            measurementId: "G-D5F8SDTH5K"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('donationForm');
+        const successMsg = document.getElementById('success-message');
+        const errorMsg = document.getElementById('error-message');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+           
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            if (!form.checkValidity()) {
+                form.classList.add('show-errors');
+                const firstInvalid = form.querySelector(':invalid');
+                if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Verifying & Saving...";
+
+            const email = document.getElementById('emailId').value.toLowerCase().trim();
+            const phone = document.getElementById('mobileNumber').value.trim();
+
+            try {
+                // Check ONLY for duplicate email
+                const qEmail = query(collection(db, "bloodDonations"), where("emailId", "==", email));
+                const querySnapshotEmail = await getDocs(qEmail);
+
+                if (!querySnapshotEmail.empty) {
+                    errorMsg.innerText = "⚠ Error: This Email Address has already been used to apply.";
+                    errorMsg.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Apply Now";
+                    return; 
+                }
+
+                // Save data - Mobile number check is removed, allowing same phone for different emails
+                await addDoc(collection(db, "bloodDonations"), {
+                    fullName: document.getElementById('fullName').value.trim(),
+                    mobileNumber: phone,
+                    emailId: email,
+                    age: document.getElementById('ageInput').value,
+                    bloodGroup: document.getElementById('bloodGroup').value,
+                    lastDonationDate: document.getElementById('lastDate').value,
+                    weight: document.getElementById('weightInput').value,
+                    submittedAt: serverTimestamp()
+                });
+
+                successMsg.style.display = 'block';
+                form.reset();
+                form.classList.remove('show-errors');
+               
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                errorMsg.innerText = "⚠ Database Error. Please check your internet.";
+                errorMsg.style.display = 'block';
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Apply Now";
+        });
+    </script>
+</body>
+</html>

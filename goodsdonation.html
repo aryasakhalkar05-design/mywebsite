@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goods Donation - NGO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #FF9800;
+            --success-green: #4CAF50;
+            --bg-gray: #f9f9f9;
+            --input-border: #e0e0e0;
+            --text-gray: #666;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            max-width: 650px;
+            width: 100%;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--primary-orange);
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* 1. Updated Name Row for 3 Columns */
+        .name-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 5px rgba(255, 152, 0, 0.2);
+        }
+
+        /* Tooltip Style */
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            font-size: 12px;
+            color: #999;
+            cursor: help;
+            margin-left: 5px;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        .info-icon:hover::after {
+            content: "After submission, our team will contact you via email to coordinate whether we will pick up the goods or if you need to visit our NGO center.";
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            width: 220px;
+            font-size: 11px;
+            z-index: 10;
+            line-height: 1.4;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #e68a00;
+        }
+
+        /* Green Success Message */
+        #success-msg {
+            display: none;
+            background-color: #dff0d8;
+            color: var(--success-green);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border: 1px solid #d6e9c6;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 13px;
+        }
+
+        @media (max-width: 480px) {
+            .name-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <div id="success-msg">Form submitted successfully! Our team will reply for the further process.</div>
+
+    <h1>Donate Goods</h1>
+    <p class="subtitle">Every contribution brings a smile to someone in need.</p>
+
+    <form id="donationForm">
+        <div class="name-row">
+            <input type="text" id="firstName" placeholder="First Name" required>
+            <input type="text" id="middleName" placeholder="Middle Name" required>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+        </div>
+
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Email Address" required>
+        </div>
+
+        <div class="input-group">
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+        </div>
+
+        <div class="input-group">
+            <select id="cause" required>
+                <option value="" disabled selected>Select Cause</option>
+                <option value="Education">Education (Books, Stationery)</option>
+                <option value="Healthcare">Healthcare (Medicines, Kits)</option>
+                <option value="Shelter">Shelter (Blankets, Clothes)</option>
+                <option value="Food">Food (Dry Grains, Canned Food)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label style="font-size: 13px; color: var(--text-gray);">
+                Description of Goods 
+                <span class="info-icon">i</span>
+            </label>
+            <textarea id="goodsDescription" rows="3" placeholder="Describe the items..." required></textarea>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="address" placeholder="Full Postal Address for Pickup" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Donation</button>
+    </form>
+
+    <a href="homepage.html" class="back-link">← Back to Homepage</a>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+        authDomain: "ngo-d09d5.firebaseapp.com",
+        projectId: "ngo-d09d5",
+        storageBucket: "ngo-d09d5.firebasestorage.app",
+        messagingSenderId: "156904887060",
+        appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+        measurementId: "G-D5F8SDTH5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('donationForm');
+    const successMsg = document.getElementById('success-msg');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const donationData = {
+            firstName: document.getElementById('firstName').value,
+            middleName: document.getElementById('middleName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            cause: document.getElementById('cause').value,
+            description: document.getElementById('goodsDescription').value,
+            address: document.getElementById('address').value,
+            timestamp: new Date()
+        };
+
+        try {
+            // Logic to add document. Firebase handles duplicate names/emails as new unique entries.
+            await addDoc(collection(db, "goodsDonations"), donationData);
+            
+            // Show Green Success Message
+            successMsg.style.display = 'block';
+            form.style.display = 'none'; // Optional: hide form after success
+            
+            // Scroll to top to see message
+            window.scrollTo(0, 0);
+
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("Error submitting donation. Please check your internet and try again.");
+        }
+    });
+</script>
+
+</body>
+</html>

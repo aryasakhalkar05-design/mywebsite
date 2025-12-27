@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Support Program | NGO</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-card {
+            background: white;
+            max-width: 650px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-top: 10px solid #ff9800;
+        }
+
+        h1 { color: #ff9800; text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+        
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fcfcfc;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus { border-color: #ff9800; outline: none; background: #fff; }
+
+        /* Info Icon Styling */
+        .info-container { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .info-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 18px;
+            height: 18px;
+            background-color: #ff9800;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-style: italic;
+            font-weight: bold;
+            cursor: help;
+            position: relative;
+        }
+        .info-icon:hover::after {
+            content: "Only Bachelor's graduates and above are eligible to apply.";
+            position: absolute;
+            left: 25px;
+            top: -5px;
+            background: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 10;
+            font-weight: normal;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover { background: #e68a00; }
+
+        #responseMsg { 
+            text-align: center; 
+            margin-top: 20px; 
+            font-weight: 500; 
+            line-height: 1.5;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .success { color: #1b5e20; background-color: #e8f5e9; border: 1px solid #c8e6c9; }
+        .error { color: #b71c1c; background-color: #ffebee; border: 1px solid #ffcdd2; }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <h1>Educational Support</h1>
+    <p class="subtitle">Contribute your skills to empower the next generation.</p>
+
+    <form id="eduSupportForm">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="fullName" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+            <div class="info-container">
+                <label style="margin-bottom: 0;">Occupation</label>
+                <span class="info-icon">i</span>
+            </div>
+            <input type="text" id="occupation" placeholder="Your current profession / degree" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="example@mail.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter mobile number" required>
+        </div>
+
+        <div class="form-group">
+            <label>Select Program</label>
+            <select id="programType" required>
+                <option value="" disabled selected>Choose a category...</option>
+                <option value="Academic Support">1. Academic (After-school tutoring, Library, Teacher Training)</option>
+                <option value="Career Empowerment">2. Career (Counseling, English Classes, Resume Building)</option>
+                <option value="Both">Both Programs</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Skills & Proposed Contribution</label>
+            <textarea id="contributionNotes" rows="4" 
+                placeholder="Describe your skills and specifically how you want to work based on the program selected above..." 
+                required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+        <div id="responseMsg"></div>
+    </form>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+        authDomain: "ngo-d09d5.firebaseapp.com",
+        projectId: "ngo-d09d5",
+        storageBucket: "ngo-d09d5.firebasestorage.app",
+        messagingSenderId: "156904887060",
+        appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+        measurementId: "G-D5F8SDTH5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const eduForm = document.getElementById('eduSupportForm');
+    const msgBox = document.getElementById('responseMsg');
+
+    eduForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        
+        // Final validation check
+        if (!eduForm.checkValidity()) {
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Submitting...";
+
+        try {
+            await addDoc(collection(db, "educational_support_leads"), {
+                name: document.getElementById('fullName').value,
+                occupation: document.getElementById('occupation').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                program: document.getElementById('programType').value,
+                contribution: document.getElementById('contributionNotes').value,
+                submittedAt: serverTimestamp()
+            });
+
+            // Success message as requested
+            msgBox.className = "success";
+            msgBox.innerText = "Form submitted and will be reviewed in the next 24 working hours. We will contact you through email as per our requirements. Thank you!";
+            
+            eduForm.reset();
+        } catch (error) {
+            console.error("Error:", error);
+            msgBox.className = "error";
+            msgBox.innerText = "Submission failed. Please check your connection and try again.";
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Submit Application";
+        }
+    });
+</script>
+
+</body>
+</html>

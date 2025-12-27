@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | NGO India</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-orange: #ff9800; --dark: #111; --light-grey: #f6f7f9; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--light-grey); color: #333; line-height: 1.6; }
+        
+        nav { background: #fff; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .logo-group { display: flex; align-items: center; gap: 15px; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--primary-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo img { width: 30px; }
+        .motto { font-size: 16px; font-weight: 600; color: #555; font-style: italic; border-left: 2px solid #ddd; padding-left: 15px; }
+
+        .about-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070') center/cover;
+            height: 40vh; color: white; display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+
+        .container { max-width: 1100px; margin: 50px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        
+        .info-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--primary-orange); transition: transform 0.3s ease; }
+        .info-box:hover { transform: translateY(-10px); }
+        .info-box h3 { color: var(--primary-orange); margin-bottom: 15px; font-size: 20px; }
+        .info-box img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+
+        footer { background: var(--dark); color: white; text-align: center; padding: 20px; margin-top: 50px; }
+        .back-home { display: inline-block; margin-top: 20px; color: var(--primary-orange); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-group">
+            <a href="homepage.html" class="logo">NGO <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"></a>
+            <span class="motto">परोपकारः परमो धर्मः</span>
+        </div>
+        <a href="homepage.html" class="back-home">← Back to Home</a>
+    </nav>
+
+    <header class="about-hero">
+        <div>
+            <h1>About Our NGO</h1>
+            <p>Empowering lives through compassion and action.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 style="text-align:center; color: var(--primary-orange); font-size: 32px;">What We Do</h2>
+        <p style="text-align:center; max-width: 800px; margin: 20px auto;">We believe every child deserves a future filled with hope. Our organization focuses on sustainable development and immediate relief across five core pillars.</p>
+
+        <div class="grid">
+            <div class="info-box">
+                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=500" alt="Books and Education">
+                <h3>1. Educational Support</h3>
+                <p>We provide books, tuition, and school supplies to children who cannot afford formal education, ensuring no mind goes to waste.</p>
+            </div>
+
+            <div class="info-box">
+                <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&q=80&w=500" alt="Healthcare">
+                <h3>2. Healthcare & Shelter</h3>
+                <p>Providing safe housing and medical camps for children and families. We volunteer for humanity and healthcare outreach.</p>
+            </div>
+
+            <div class="info-box">
+                <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=500" alt="Donation">
+                <h3>3. Fund & Goods Donation</h3>
+                <p>We facilitate transparent channels for donors to contribute funds or essential goods like clothes and food to those in need.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>4. Adoption Interest</h3>
+                <p>We guide interested couples through the legal and emotional journey of child adoption, helping children find loving homes.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 NGO India. All Rights Reserved. | Together for a better future.</p>
+    </footer>
+
+</body>
+</html>

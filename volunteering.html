@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO - Volunteer Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #ff9800;
+            --text-dark: #333;
+            --bg-light: #f4f7f6;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        /* Navigation Bar matching the image structure */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .logo { 
+            font-weight: 700; 
+            font-size: 24px; 
+            color: var(--primary-orange); 
+            text-decoration: none;
+        }
+
+        /* Form Container */
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 { color: var(--primary-orange); margin-bottom: 10px; font-size: 32px; }
+
+        /* Form Group Styles */
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--shadow);
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus { 
+            border-color: var(--primary-orange); 
+            background: #fff;
+        }
+
+        /* Validation Ticks */
+        .tick {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: #4CAF50;
+            display: none;
+            font-weight: bold;
+        }
+
+        input:valid:not(:placeholder-shown) ~ .tick { display: block; }
+
+        /* Info Button & Tooltip */
+        .info-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: #999;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 8px;
+            cursor: help;
+            position: relative;
+        }
+
+        .info-btn:hover::after {
+            content: "As per your selected availability, your tasks will be scheduled and assigned by the NGO coordinator.";
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            width: 220px;
+            z-index: 10;
+            line-height: 1.4;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .btn-submit:active { transform: scale(0.98); }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">NGO</div>
+    </nav>
+
+    <div class="container">
+        <h1>Volunteer Registration</h1>
+        <p style="color: #666; margin-bottom: 30px;">Join our mission to support children and poor communities.</p>
+
+        <form id="volunteerForm">
+            <div class="form-group">
+                <input type="text" id="fullName" 
+                       placeholder="Full Name (FirstName MiddleName LastName)" 
+                       pattern="^[a-zA-Z]+\s+[a-zA-Z]+\s+[a-zA-Z]+.*$" 
+                       required 
+                       title="Please enter your complete name (Name, Middle Name, and Surname separated by spaces).">
+                <span class="tick">✓</span>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email Address" required>
+                <span class="tick">✓</span>
+            </div>
+
+            <div class="form-group">
+                <input type="tel" id="phone" placeholder="Mobile Number (10 digits)" pattern="[0-9]{10}" required title="Please enter exactly 10 digits.">
+                <span class="tick">✓</span>
+            </div>
+
+            <div class="form-group">
+                <label>Availability <span class="info-btn">i</span></label>
+                <select id="availability" required>
+                    <option value="" disabled selected>Select your availability</option>
+                    <option value="Weekdays">Weekdays (Mon - Fri)</option>
+                    <option value="Weekends">Weekends (Sat - Sun)</option>
+                    <option value="Both">Both Weekdays & Weekends</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="skills" placeholder="Skills / Interests (Min 5 characters)" minlength="5" required>
+                <span class="tick">✓</span>
+            </div>
+
+            <div class="form-group">
+                <textarea id="reason" rows="3" placeholder="Why do you want to volunteer? (Min 5 characters)" minlength="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your specific Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+            authDomain: "ngo-d09d5.firebaseapp.com",
+            projectId: "ngo-d09d5",
+            storageBucket: "ngo-d09d5.firebasestorage.app",
+            messagingSenderId: "156904887060",
+            appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+            measurementId: "G-D5F8SDTH5K"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('volunteerForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            submitBtn.innerText = "Submitting...";
+            submitBtn.disabled = true;
+
+            const formData = {
+                name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                availability: document.getElementById('availability').value,
+                skills: document.getElementById('skills').value,
+                reason: document.getElementById('reason').value,
+                submittedAt: new Date().toISOString()
+            };
+
+            try {
+                // Saves to your separate 'volunteer_applications' collection
+                await addDoc(collection(db, "volunteer_applications"), formData);
+                alert("Thank you! Your application has been successfully saved to Firebase.");
+                form.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Submission failed. Please check your Firebase Firestore rules.");
+            } finally {
+                submitBtn.innerText = "Submit Application";
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

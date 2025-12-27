@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-orange: #f38f13; --bg-light: #f9f9f9; --error-red: #d93025; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-light); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        header { padding: 20px 50px; background: white; }
+        .logo { color: var(--primary-orange); font-weight: 700; font-size: 24px; }
+        .login-wrapper { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        h1 { color: var(--primary-orange); font-size: 32px; margin-bottom: 5px; }
+        .subtitle { color: #666; margin-bottom: 30px; }
+        .login-form { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
+        input { padding: 15px 20px; border: 1px solid #e0e0e0; border-radius: 12px; font-size: 16px; outline: none; }
+        .btn-login { background-color: var(--primary-orange); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; font-size: 18px; cursor: pointer; transition: 0.3s; }
+        .btn-login:disabled { background-color: #ccc; }
+        .controls-row { display: flex; align-items: center; gap: 15px; margin-top: 10px; }
+        #wrongCredentials { color: var(--error-red); font-size: 14px; display: none; font-weight: 600; }
+        .links-row { margin-top: 15px; display: flex; gap: 20px; flex-wrap: wrap; }
+        .links { color: #666; text-decoration: underline; font-size: 14px; cursor: pointer; background: none; border: none; padding: 0; }
+        #forgotMessage { display: none; margin-top: 15px; padding: 12px; border: 1px dashed var(--primary-orange); border-radius: 8px; font-size: 13px; color: #444; background: #fffbeb; }
+    </style>
+</head>
+<body>
+    <header><div class="logo">NGO</div></header>
+    
+    <div class="login-wrapper">
+        <h1>Login</h1>
+        <p class="subtitle">Log in with your registered credentials</p>
+        
+        <form class="login-form" id="loginForm">
+            <input type="email" id="email" placeholder="Gmail Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            
+            <div class="controls-row">
+                <button type="submit" class="btn-login" id="loginBtn">Log In</button>
+                <span id="wrongCredentials">Wrong credentials?</span>
+            </div>
+
+            <div class="links-row">
+                <button type="button" class="links" onclick="toggleForgot()">Forgot Password?</button>
+                <a href="register.html" class="links">Don't have an account? Register here</a>
+            </div>
+
+            <div id="forgotMessage">
+                If you forgot your password, please contact: <br>
+                <strong>aryasakhalkar05@gmail.com</strong>
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+            authDomain: "ngo-d09d5.firebaseapp.com",
+            projectId: "ngo-d09d5",
+            storageBucket: "ngo-d09d5.firebasestorage.app",
+            messagingSenderId: "156904887060",
+            appId: "1:156904887060:web:78f1bd83ecf19a9acae801"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailVal = document.getElementById('email').value.trim();
+            const passVal = document.getElementById('password').value;
+            const errSpan = document.getElementById('wrongCredentials');
+            const btn = document.getElementById('loginBtn');
+            
+            errSpan.style.display = 'none';
+            btn.innerText = "Checking...";
+            btn.disabled = true;
+
+            signInWithEmailAndPassword(auth, emailVal, passVal)
+                .then((userCredential) => {
+                    console.log("Login Success!");
+                    window.location.href = "homepage.html"; 
+                })
+                .catch((error) => {
+                    btn.innerText = "Log In";
+                    btn.disabled = false;
+                    errSpan.style.display = 'inline';
+                    console.error("Firebase Error:", error.code, error.message);
+                });
+        });
+    </script>
+
+    <script>
+        function toggleForgot() {
+            const msg = document.getElementById('forgotMessage');
+            msg.style.display = (msg.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>

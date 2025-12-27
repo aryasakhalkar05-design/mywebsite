@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Adoption Inquiry | NGO</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .form-card {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-top: 10px solid #ff9800;
+        }
+
+        .form-header {
+            padding: 40px 40px 10px 40px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            color: #ff9800;
+            font-size: 32px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        form { padding: 20px 40px 40px 40px; }
+
+        .form-group { margin-bottom: 22px; }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 18px;
+            height: 18px;
+            background-color: #ff9800;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 5px;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fdfdfd;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff9800;
+            background-color: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        #statusMsg {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <div class="form-header">
+        <h1>Child Adoption</h1>
+        <p>Complete the inquiry form to start the legal adoption process.</p>
+    </div>
+
+    <form id="adoptionForm">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="fullName" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="example@mail.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter mobile number" required>
+        </div>
+
+        <div class="form-group">
+            <label>Occupation</label>
+            <input type="text" id="occupation" placeholder="Your profession" required>
+        </div>
+
+        <div class="form-group">
+            <label>Annual Income 
+                <span class="info-icon" title="Applicants must have a stable source of income as per legal adoption guidelines.">i</span>
+            </label>
+            <select id="annualIncome" required>
+                <option value="" disabled selected>Select Income Range</option>
+                <option value="Below 5 Lakhs">Below ₹5,00,000</option>
+                <option value="5-10 Lakhs">₹5,00,000 - ₹10,00,000</option>
+                <option value="10-20 Lakhs">₹10,00,000 - ₹20,00,000</option>
+                <option value="Above 20 Lakhs">Above ₹20,00,000</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Preferred Adoption Category</label>
+            <select id="category" required>
+                <option value="" disabled selected>Select category...</option>
+                <option value="Infant">Infant (0-2 years)</option>
+                <option value="Child">Young Child (2-6 years)</option>
+                <option value="Older">Older Child (Above 6 years)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Why do you wish to adopt?</label>
+            <textarea id="reason" rows="3" placeholder="Describe your motivation..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit Inquiry</button>
+        <div id="statusMsg"></div>
+    </form>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Your exact Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+        authDomain: "ngo-d09d5.firebaseapp.com",
+        projectId: "ngo-d09d5",
+        storageBucket: "ngo-d09d5.firebasestorage.app",
+        messagingSenderId: "156904887060",
+        appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+        measurementId: "G-D5F8SDTH5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('adoptionForm');
+    const status = document.getElementById('statusMsg');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const emailValue = document.getElementById('email').value.trim();
+        
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+        status.style.display = "none";
+
+        try {
+            // Check for one-time submission
+            const colRef = collection(db, "adoption_inquiries");
+            const q = query(colRef, where("email", "==", emailValue));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                status.style.display = "block";
+                status.style.color = "#b71c1c";
+                status.style.background = "#ffebee";
+                status.innerText = "You have already submitted an inquiry with this email. Only one submission is allowed.";
+                btn.disabled = false;
+                btn.innerText = "Submit Inquiry";
+                return;
+            }
+
+            // Save Data
+            await addDoc(colRef, {
+                name: document.getElementById('fullName').value,
+                email: emailValue,
+                phone: document.getElementById('phone').value,
+                occupation: document.getElementById('occupation').value,
+                annualIncome: document.getElementById('annualIncome').value,
+                category: document.getElementById('category').value,
+                reason: document.getElementById('reason').value,
+                timestamp: serverTimestamp()
+            });
+
+            status.style.display = "block";
+            status.style.color = "#1b5e20";
+            status.style.background = "#e8f5e9";
+            status.innerText = "Form submitted successfully! Based on your filled data, you will get a notification regarding the next steps in the legal process within 48 hours.";
+            form.reset();
+
+        } catch (error) {
+            console.error("Submission Error:", error);
+            status.style.display = "block";
+            status.style.color = "#b71c1c";
+            status.innerText = "Submission failed. Please check your Firebase Firestore rules.";
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Submit Inquiry";
+        }
+    });
+</script>
+
+</body>
+</html>

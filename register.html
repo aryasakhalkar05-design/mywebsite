@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO - Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-orange: #f38f13; --bg-light: #f9f9f9; --error-red: #ff4d4d; --success-green: #2ecc71; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-light); margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        header { padding: 20px 50px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .logo { color: var(--primary-orange); font-weight: 700; font-size: 24px; }
+        .container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .reg-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; }
+        h1 { color: var(--primary-orange); margin: 0 0 20px 0; text-align: center; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input.invalid { border-color: var(--error-red); }
+        .error-text { color: var(--error-red); font-size: 11px; display: none; margin-top: 4px; }
+        .btn-reg { width: 100%; background: var(--primary-orange); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; }
+        #successMsg { color: var(--success-green); text-align: center; margin-top: 15px; display: none; font-weight: 600; }
+        .footer-link { text-align: center; margin-top: 20px; font-size: 14px; }
+        .footer-link a { color: #4a6fa5; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header><div class="logo">NGO</div></header>
+    <div class="container">
+        <div class="reg-card">
+            <h1>Register</h1>
+            <form id="regForm">
+                <div class="input-group">
+                    <input type="text" id="fullName" placeholder="Full Name">
+                    <div class="error-text">Please fill this section</div>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Gmail Address">
+                    <div class="error-text">Please enter a valid Gmail</div>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="phone" placeholder="Mobile Number (10 digits)">
+                    <div class="error-text">Enter exactly 10 digits</div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Create Password">
+                    <div class="error-text">Password is required</div>
+                </div>
+                <button type="submit" class="btn-reg">Register</button>
+                <div id="successMsg">Registration successful! You can now log in.</div>
+            </form>
+            <div class="footer-link"><a href="login.html">Already a volunteer? Log In</a></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+            authDomain: "ngo-d09d5.firebaseapp.com",
+            projectId: "ngo-d09d5",
+            storageBucket: "ngo-d09d5.firebasestorage.app",
+            messagingSenderId: "156904887060",
+            appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+            measurementId: "G-D5F8SDTH5K"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        document.getElementById('regForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let isValid = true;
+            const inputs = document.querySelectorAll('input');
+            const phoneVal = document.getElementById('phone').value;
+            const emailVal = document.getElementById('email').value;
+            const passVal = document.getElementById('password').value;
+            const nameVal = document.getElementById('fullName').value;
+
+            // Reset UI
+            inputs.forEach(i => { i.classList.remove('invalid'); i.nextElementSibling.style.display='none'; });
+            document.getElementById('successMsg').style.display = 'none';
+
+            // Validation logic
+            inputs.forEach(i => { if(!i.value) { i.classList.add('invalid'); i.nextElementSibling.style.display='block'; isValid = false; } });
+            if(phoneVal.length !== 10) { document.getElementById('phone').classList.add('invalid'); document.getElementById('phone').nextElementSibling.style.display='block'; isValid = false; }
+
+            if(!isValid) return;
+
+            try {
+                // 1. Create Auth Account
+                const userCred = await createUserWithEmailAndPassword(auth, emailVal, passVal);
+                
+                // 2. Create entry in Firestore "volunteers" collection
+                await setDoc(doc(db, "volunteers", userCred.user.uid), {
+                    name: nameVal,
+                    phone: phoneVal,
+                    email: emailVal,
+                    registeredAt: new Date().toISOString()
+                });
+
+                document.getElementById('successMsg').style.display = 'block';
+                document.getElementById('regForm').reset();
+            } catch (err) { alert(err.message); }
+        });
+    </script>
+</body>
+</html>

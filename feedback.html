@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Home & Feedback</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* Homepage Content */
+        #home-content {
+            text-align: center;
+        }
+
+        .hero-btn {
+            background-color: #FF9800;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .hero-btn:hover {
+            transform: scale(1.05);
+            background-color: #fb8c00;
+        }
+
+        /* Feedback Modal/Card Overlay */
+        #feedback-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Matching your image exactly */
+        .feedback-card {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 25px;
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .feedback-card h2 {
+            margin: 0 0 15px 0;
+            font-weight: 800;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .feedback-card p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* Orange Button from Image */
+        .btn-give-feedback {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-give-feedback:hover {
+            background-color: #e68a00;
+        }
+
+        .close-link {
+            display: block;
+            margin-top: 15px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home-content">
+        <h1>Welcome to our NGO</h1>
+        <p>Your support makes a difference.</p>
+        <button class="hero-btn" onclick="openFeedback()">Give Feedback</button>
+    </div>
+
+    <div id="feedback-overlay">
+        <div class="feedback-card">
+            <h2>Feedback</h2>
+            <p>We value your thoughts! Let us know how we are doing.</p>
+            
+            <textarea id="feedbackText" rows="4" placeholder="How can we improve?"></textarea>
+            
+            <button class="btn-give-feedback" id="submitFeedback">Give Feedback</button>
+            <a href="#" class="close-link" onclick="closeFeedback()">Cancel</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAtLcBHOOdA-fV-Ky_Q2QtrNtsUcmqNoY",
+            authDomain: "ngo-d09d5.firebaseapp.com",
+            projectId: "ngo-d09d5",
+            storageBucket: "ngo-d09d5.firebasestorage.app",
+            messagingSenderId: "156904887060",
+            appId: "1:156904887060:web:78f1bd83ecf19a9acae801",
+            measurementId: "G-D5F8SDTH5K"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // UI Toggle Functions
+        window.openFeedback = () => {
+            document.getElementById('feedback-overlay').style.display = 'flex';
+        };
+
+        window.closeFeedback = () => {
+            document.getElementById('feedback-overlay').style.display = 'none';
+        };
+
+        // Data Submission Logic
+        document.getElementById('submitFeedback').addEventListener('click', async () => {
+            const feedbackVal = document.getElementById('feedbackText').value;
+
+            if (!feedbackVal.trim()) {
+                alert("Please write something first!");
+                return;
+            }
+
+            try {
+                // This creates a NEW collection called "feedback" 
+                // separate from your "volunteer_registration"
+                await addDoc(collection(db, "feedback"), {
+                    comment: feedbackVal,
+                    submittedAt: serverTimestamp()
+                });
+
+                alert("Thank you! Your feedback has been sent.");
+                document.getElementById('feedbackText').value = ""; // Clear box
+                closeFeedback(); // Hide form
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                alert("Submission failed. Check your Firestore rules.");
+            }
+        });
+    </script>
+</body>
+</html>
